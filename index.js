@@ -1,5 +1,5 @@
 const express = require("express");
-
+const jwt = require("jsonwebtoken");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const app = express();
@@ -33,6 +33,20 @@ async function run() {
       .collection("products");
 
     // prodcts api
+      // prodcts api
+
+    app.post("/jwt", async (req, res) => {
+      const email = req.body;
+
+      const token = jwt.sign(
+        {
+          data: email,
+        },
+        "secret",
+        { expiresIn: "1h" }
+      );
+      res.send({ token });
+    });
 
     app.post("/products", async (req, res) => {
       try {
@@ -87,6 +101,7 @@ async function run() {
               stock: data.quantity,
               description: data.description,
               image: data.image,
+              category:data.category,
             },
           };
 
